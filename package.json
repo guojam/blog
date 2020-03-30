@@ -1,0 +1,21 @@
+{
+    "name": "myblog",
+    "version": "0.0.1",
+    "description": "",
+    "main": "index.js",
+    "authors": {
+        "name": "guojam",
+        "email": "guojam@gmail.com"
+    },
+    "repository": "https://github.com/guojam/blog",
+    "scripts": {
+        "dev": "vuepress dev blog",
+        "build": "vuepress build blog",
+        "deploy": "bash deploy.sh"
+    },
+    "license": "MIT",
+    "devDependencies": {
+        "vuepress": "^1.3.1",
+        "@vuepress/theme-blog": "^2.1.0"
+    }
+}
