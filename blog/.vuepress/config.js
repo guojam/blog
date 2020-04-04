@@ -2,7 +2,7 @@ module.exports = {
     title: "Jam's blog",
     base: '/blog/',
     description: 'This is a blog example built by VuePress',
-    theme: '@vuepress/theme-blog', // OR shortcut: @vuepress/blog
+    // theme: '@vuepress/theme-blog', // OR shortcut: @vuepress/blog
     themeConfig: {
         dateFormat: 'YYYY-MM-DD',
         /**
