@@ -11,7 +11,6 @@
           :tags="$frontmatter.tags"
           :author="$frontmatter.author"
           :date="$frontmatter.date"
-          :location="$frontmatter.location"
         />
       </header>
       <Content itemprop="articleBody" />
@@ -27,7 +26,7 @@
 
 <script>
 import Toc from "@theme/components/Toc.vue";
-import PostMeta from "@theme/components/PostMeta.vue";
+import PostMeta from "../components/PostMeta.vue";
 import { Comment } from "@vuepress/plugin-blog/lib/client/components";
 
 export default {
@@ -47,9 +46,9 @@ export default {
   @extend $wrapper;
   font-size: 16px;
   letter-spacing: 0px;
-  font-family: PT Serif, Serif;
   color: $textColor;
   position: relative;
+  background: #fff;
 
   @media (min-width: $MQNarrow) {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05), 0 6px 6px rgba(0, 0, 0, 0.07);
@@ -61,10 +60,6 @@ export default {
 }
 
 @media (max-width: $MQMobile) {
-  .vuepress-blog-theme-content {
-    padding-top: 0;
-  }
-
   .post-title {
     margin-top: 0;
   }

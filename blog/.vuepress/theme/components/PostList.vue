@@ -127,7 +127,7 @@ export default {
 }
 
 .ui-post {
-  border: 1px solid $borderColor;
+  background-color: #fff;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   padding: 20px 20px 0;
   margin: 20px 0;
@@ -139,7 +139,7 @@ export default {
 }
 
 .ui-post-title {
-  font-size: 28px;
+  font-size: 20px;
   border-bottom: 0;
 
   a {

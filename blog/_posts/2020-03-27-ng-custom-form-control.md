@@ -38,19 +38,19 @@ import {
     ControlValueAccessor,
     FormControl,
     NG_VALIDATORS,
-    NG_VALUE_ACCESSOR
+    NG_VALUE_ACCESSOR,
 } from '@angular/forms';
 
 const controlValueAccessor = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => FormRadioGroupComponent),
-    multi: true
+    multi: true,
 };
 // 如果要在内部定义验证器，需在组件元数据providers设置该对象
 const controlValidators = {
     provide: NG_VALIDATORS,
     useExisting: forwardRef(() => FormRadioGroupComponent),
-    multi: true
+    multi: true,
 };
 
 /** 自定义表单radio group组件 */
@@ -73,7 +73,7 @@ const controlValidators = {
         </ng-container>
     `,
     styleUrls: ['./form-radio-group.component.scss'],
-    providers: [controlValueAccessor, controlValidators]
+    providers: [controlValueAccessor, controlValidators],
 })
 export class FormRadioGroupComponent implements ControlValueAccessor {
     // ...
@@ -126,8 +126,8 @@ export class FormRadioGroupComponent implements ControlValueAccessor {
             : {
                   required: {
                       valid: false,
-                      text: '不能为空'
-                  }
+                      text: '不能为空',
+                  },
               };
     }
 }
@@ -164,7 +164,7 @@ export class FormRadioGroupComponent implements ControlValueAccessor {
 
 @Component({
     templateUrl: './parent.component.html',
-    styleUrls: ['./parent.component.scss']
+    styleUrls: ['./parent.component.scss'],
 })
 export class ParentComponent implements AfterContentInit {
     formGroup: FormGroup;
@@ -173,16 +173,16 @@ export class ParentComponent implements AfterContentInit {
     genderRadioOptions = [
         {
             label: '男',
-            value: 'male'
+            value: 'male',
         },
         {
             label: '女',
-            value: 'female'
+            value: 'female',
         },
         {
             label: '未知',
-            value: 'other'
-        }
+            value: 'other',
+        },
     ];
 
     constructor(private fb: FormBuilder) {}
@@ -197,7 +197,7 @@ export class ParentComponent implements AfterContentInit {
     initForm() {
         this.formGroup = this.fb.group({
             // 单选框group组件
-            inputRadioGender: ['', [Validators.required]]
+            inputRadioGender: ['', [Validators.required]],
         });
     }
 
