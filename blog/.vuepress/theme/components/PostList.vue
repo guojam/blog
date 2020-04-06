@@ -127,18 +127,18 @@ export default {
 }
 
 .ui-post {
-  padding-bottom: 25px;
-  margin-bottom: 25px;
-  border-bottom: 1px solid $borderColor;
+  border: 1px solid $borderColor;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  padding: 20px 20px 0;
+  margin: 20px 0;
 
-  &:last-child {
-    border-bottom: 0px;
-    margin-bottom: 0px;
+  footer {
+    border-top: 1px solid $borderColor;
+    padding: 10px 0;
   }
 }
 
 .ui-post-title {
-  font-family: PT Serif, Serif;
   font-size: 28px;
   border-bottom: 0;
 
