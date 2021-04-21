@@ -42,9 +42,7 @@ MDN 上关于 then 参数的说明:
 -   如果 Promise 处于 pending 状态，这些方法的回调函数会加到 promise 的 [[PromiseFulfillReactions]]/[[PromiseRejectReactions]] 列表里成为最后一项，待 Promise 状态变为 fulfilled 后，将该列表中的每一项加入微任务队列
 -   如果 Promise 处于 fulfilled 状态， 回调会直接放入微任务队列
 
-## promise 特点
-
-### 与 observable 区别
+## promise 与 observable 区别
 
 [不要把 Rx 用成 Promise](https://zhuanlan.zhihu.com/p/20531896)
 
