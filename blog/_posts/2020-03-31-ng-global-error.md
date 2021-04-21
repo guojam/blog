@@ -3,7 +3,6 @@ date: 2020-03-31
 tags:
     - Angular
     - 异常
-author: guojam
 ---
 
 # ng 全局异常处理
@@ -21,7 +20,7 @@ class GlobalErrorhandler implements ErrorHandler {
 }
 // root module: app.module.ts
 @NgModule({
-    providers: [{ provide: ErrorHandler, useClass: GlobalErrorhandler }]
+    providers: [{ provide: ErrorHandler, useClass: GlobalErrorhandler }],
 })
 class MyModule {}
 ```

@@ -37,7 +37,7 @@ A process can ask the Operating System to spin up another process to run differe
 
 ![浏览器架构](https://developers.google.com/web/updates/images/inside-browser/part1/browser-arch.png)
 
-图 7：不同浏览器架构的进程/线程示意图
+上图：不同浏览器架构的进程/线程示意图
 
 这些不同的体系结构是实现细节。没有关于如何构建 web 浏览器的标准规范。一种浏览器的方法可能与另一种完全不同。
 
@@ -62,7 +62,7 @@ A process can ask the Operating System to spin up another process to run differe
 
 ![Chrome 进程](https://developers.google.com/web/updates/images/inside-browser/part1/browserui.png)
 
-图 9：不同进程指向浏览器 UI 的不同部分
+上图：不同进程指向浏览器 UI 的不同部分
 
 ## Event Loop
 
@@ -102,7 +102,7 @@ An event loop has one or more task queues. A task queue is a set of tasks.
 
 注意：
 Task queues are sets, not queues, because step one of the event loop processing model grabs the first runnable task from the chosen queue, instead of dequeuing the first task.
-任务队列 是 集合 而非 队列， 因为 [事件循环处理模型](#事件循环处理模型)的第一步 会从选中的队列中取第一个 可运行 任务，而不是 出列 第一个任务。
+任务队列 是 集合 而非 队列， 因为事件循环处理模型的第一步 会从选中的队列中取第一个 可运行 任务，而不是 出列 第一个任务。
 
 Tasks encapsulate algorithms that are responsible for such work as:
 任务封装了负责以下工作的算法：
@@ -295,7 +295,7 @@ p2 中的 then 全部调用完成之后，会将 p 的 resolve 放入微任务�
 
 [ECMAScript 的 Job Queues 和 Event loop 有什么关系？](https://www.zhihu.com/question/40063533/answer/271176956)
 
-[JavaScript Visualized Series' Articles(https://dev.to/lydiahallie/series/3341)
+[JavaScript Visualized Series' Articles](https://dev.to/lydiahallie/series/3341)
 
 [异步的 Promise 的 then 方法的回调是何时被添加到 microtasks queue 中的?](https://www.zhihu.com/question/62305365)
 

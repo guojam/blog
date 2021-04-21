@@ -4,7 +4,6 @@ tags:
     - Angular
     - ng5
     - 表单
-author: guojam
 ---
 
 # ng 自定义表单控件
