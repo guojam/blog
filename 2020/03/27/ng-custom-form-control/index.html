@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ng 自定义表单控件 | Jam&#39;s blog</title>
+    <meta name="description" content="
+一. 实现自定义表单控件
+
+1. ControlValueAccessor 接口
+
+要实现自定义表单控件，需要实现ControlValueAccessor 接口。
+该接口定义了四个方法
+
+interface ControlValueAccessor {
+    w ...">
+    <meta name="generator" content="VuePress 1.4.0">
+    
+    
+    <link rel="preload" href="/blog/assets/css/0.styles.06eee1e4.css" as="style"><link rel="preload" href="/blog/assets/js/app.c68185d2.js" as="script"><link rel="preload" href="/blog/assets/js/6.208dbb32.js" as="script"><link rel="preload" href="/blog/assets/js/4.bd116204.js" as="script"><link rel="preload" href="/blog/assets/js/19.2863657b.js" as="script"><link rel="prefetch" href="/blog/assets/js/1.83070e30.js"><link rel="prefetch" href="/blog/assets/js/10.2b6e9132.js"><link rel="prefetch" href="/blog/assets/js/11.472170bb.js"><link rel="prefetch" href="/blog/assets/js/12.47e0aaee.js"><link rel="prefetch" href="/blog/assets/js/13.117ff703.js"><link rel="prefetch" href="/blog/assets/js/14.c617a9ec.js"><link rel="prefetch" href="/blog/assets/js/15.c0896ac2.js"><link rel="prefetch" href="/blog/assets/js/16.3d83079c.js"><link rel="prefetch" href="/blog/assets/js/17.5489a10f.js"><link rel="prefetch" href="/blog/assets/js/18.4ba9fcc5.js"><link rel="prefetch" href="/blog/assets/js/20.d2043ed0.js"><link rel="prefetch" href="/blog/assets/js/21.f0052576.js"><link rel="prefetch" href="/blog/assets/js/5.44052d43.js"><link rel="prefetch" href="/blog/assets/js/7.9bf5a85f.js"><link rel="prefetch" href="/blog/assets/js/8.50a46eb7.js"><link rel="prefetch" href="/blog/assets/js/9.f7621bfb.js"><link rel="prefetch" href="/blog/assets/js/vuejs-paginate.04bf6230.js">
+    <link rel="stylesheet" href="/blog/assets/css/0.styles.06eee1e4.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div id="vuepress-theme-blog__global-layout"><section id="header-wrapper"><header id="header"><div class="header-wrapper"><div class="title"><a href="/blog/" class="nav-link home-link">Jam's blog</a></div> <div class="header-right-wrap"><ul class="nav"><li class="nav-item"><a href="/blog/" class="nav-link">Blog</a></li><li class="nav-item"><a href="/blog/tag/" class="nav-link">Tags</a></li></ul> <div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div></div></div></header></section> <div id="mobile-header"><div class="mobile-header-bar"><div class="mobile-header-title"><a href="/blog/" class="nav-link mobile-home-link">Jam's blog</a> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div> <div class="mobile-menu-wrapper"><hr class="menu-divider"> <ul class="mobile-nav"><li class="mobile-nav-item"><a href="/blog/" class="nav-link">Blog</a></li><li class="mobile-nav-item"><a href="/blog/tag/" class="nav-link">Tags</a></li></ul></div></div></div> <div class="content-wrapper"><div id="vuepress-theme-blog__post-layout"><article itemscope="itemscope" itemtype="https://schema.org/BlogPosting" class="vuepress-blog-theme-content"><header><h1 itemprop="name headline" class="post-title"></h1> <div class="post-meta"><!----> <div class="post-meta-date"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> <time pubdate itemprop="datePublished" datetime="2020-03-27T00:00:00.000Z">
+      2020-03-27
+    </time></div> <ul itemprop="keywords" class="post-meta-tags"><li class="post-tag" data-v-52d6caad><a href="/blog/tag/Angular" data-v-52d6caad>Angular</a></li><li class="post-tag" data-v-52d6caad><a href="/blog/tag/ng5" data-v-52d6caad>ng5</a></li><li class="post-tag" data-v-52d6caad><a href="/blog/tag/表单" data-v-52d6caad>表单</a></li></ul></div></header> <div itemprop="articleBody" class="content__default"><h1 id="ng-自定义表单控件"><a href="#ng-自定义表单控件" class="header-anchor">#</a> ng 自定义表单控件</h1> <h2 id="一-实现自定义表单控件"><a href="#一-实现自定义表单控件" class="header-anchor">#</a> 一. 实现自定义表单控件</h2> <h3 id="_1-controlvalueaccessor-接口"><a href="#_1-controlvalueaccessor-接口" class="header-anchor">#</a> 1. ControlValueAccessor 接口</h3> <p>要实现自定义表单控件，需要实现<a href="https://angular.io/api/forms/ControlValueAccessor" target="_blank" rel="noopener noreferrer">ControlValueAccessor<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> 接口。
+该接口定义了四个方法</p> <div class="language-ts extra-class"><pre class="language-ts"><code><span class="token keyword">interface</span> <span class="token class-name">ControlValueAccessor</span> <span class="token punctuation">{</span>
+    <span class="token function">writeValue</span><span class="token punctuation">(</span>obj<span class="token operator">:</span> <span class="token builtin">any</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span>
+    <span class="token function">registerOnChange</span><span class="token punctuation">(</span>fn<span class="token operator">:</span> <span class="token builtin">any</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span>
+    <span class="token function">registerOnTouched</span><span class="token punctuation">(</span>fn<span class="token operator">:</span> <span class="token builtin">any</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span>
+    <span class="token function">setDisabledState</span><span class="token punctuation">(</span>isDisabled<span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">)</span><span class="token operator">?</span><span class="token operator">:</span> <span class="token keyword">void</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h3 id="_2-具体实现"><a href="#_2-具体实现" class="header-anchor">#</a> 2. 具体实现</h3> <p>以下实现一个自定义 radio group</p> <div class="language-ts extra-class"><pre class="language-ts"><code><span class="token comment">/**
+ * file: form-radio-group.component.ts
+ */</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> Component<span class="token punctuation">,</span> forwardRef<span class="token punctuation">,</span> Input <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'@angular/core'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span>
+    ControlValueAccessor<span class="token punctuation">,</span>
+    FormControl<span class="token punctuation">,</span>
+    <span class="token constant">NG_VALIDATORS</span><span class="token punctuation">,</span>
+    <span class="token constant">NG_VALUE_ACCESSOR</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'@angular/forms'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> controlValueAccessor <span class="token operator">=</span> <span class="token punctuation">{</span>
+    provide<span class="token operator">:</span> <span class="token constant">NG_VALUE_ACCESSOR</span><span class="token punctuation">,</span>
+    useExisting<span class="token operator">:</span> <span class="token function">forwardRef</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> FormRadioGroupComponent<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    multi<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token comment">// 如果要在内部定义验证器，需在组件元数据providers设置该对象</span>
+<span class="token keyword">const</span> controlValidators <span class="token operator">=</span> <span class="token punctuation">{</span>
+    provide<span class="token operator">:</span> <span class="token constant">NG_VALIDATORS</span><span class="token punctuation">,</span>
+    useExisting<span class="token operator">:</span> <span class="token function">forwardRef</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> FormRadioGroupComponent<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    multi<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token comment">/** 自定义表单radio group组件 */</span>
+@<span class="token function">Component</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    selector<span class="token operator">:</span> <span class="token string">'app-form-radio-group'</span><span class="token punctuation">,</span>
+    template<span class="token operator">:</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">
+        &lt;ng-container *ngFor=&quot;let item of items; let i = index&quot;&gt;
+            &lt;input
+                type=&quot;radio&quot;
+                name=&quot;{{ name }}&quot;
+                id=&quot;{{ radioName + i }}&quot;
+                [value]=&quot;item.value&quot;
+                [checked]=&quot;item.value === value&quot;
+                [disabled]=&quot;disabled&quot;
+                (change)=&quot;valueChanged($event, item)&quot;
+            /&gt;
+            &lt;label for=&quot;{{ radioName + i }}&quot;&gt;
+                {{ item.label }}
+            &lt;/label&gt;
+        &lt;/ng-container&gt;
+    </span><span class="token template-punctuation string">`</span></span><span class="token punctuation">,</span>
+    styleUrls<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'./form-radio-group.component.scss'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    providers<span class="token operator">:</span> <span class="token punctuation">[</span>controlValueAccessor<span class="token punctuation">,</span> controlValidators<span class="token punctuation">]</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">FormRadioGroupComponent</span> <span class="token keyword">implements</span> <span class="token class-name">ControlValueAccessor</span> <span class="token punctuation">{</span>
+    <span class="token comment">// ...</span>
+
+    <span class="token comment">/** radio group name */</span>
+    @<span class="token function">Input</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    name<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+
+    <span class="token comment">/** radio data */</span>
+    @<span class="token function">Input</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    items<span class="token operator">:</span> <span class="token punctuation">{</span> value<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span> label<span class="token operator">:</span> <span class="token builtin">string</span> <span class="token punctuation">}</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+    disabled<span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">;</span>
+    value<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token function-variable function">onChange</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter">_<span class="token operator">:</span> <span class="token builtin">string</span></span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token function-variable function">onTouched</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token comment">/** 实现ControlValueAccessor接口的4个方法 ------start */</span>
+    <span class="token function">writeValue</span><span class="token punctuation">(</span>value<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>value <span class="token operator">=</span> value<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">onChange</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token function">registerOnChange</span><span class="token punctuation">(</span>fn<span class="token operator">:</span> <span class="token builtin">any</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>onChange <span class="token operator">=</span> fn<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token function">registerOnTouched</span><span class="token punctuation">(</span>fn<span class="token operator">:</span> <span class="token builtin">any</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>onTouched <span class="token operator">=</span> fn<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token function">setDisabledState</span><span class="token punctuation">(</span>isDisabled<span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>disabled <span class="token operator">=</span> isDisabled<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment">/** 实现ControlValueAccessor接口的4个方法 ------end */</span>
+
+    <span class="token keyword">get</span> <span class="token function">radioName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token string">'radio_'</span> <span class="token operator">+</span> <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">+</span> <span class="token string">'_'</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token function">valueChanged</span><span class="token punctuation">(</span><span class="token parameter">event<span class="token punctuation">,</span> item</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">writeValue</span><span class="token punctuation">(</span>item<span class="token punctuation">.</span>value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">/** 控件自定义验证方法 */</span>
+    <span class="token function">validate</span><span class="token punctuation">(</span><span class="token parameter">control<span class="token operator">:</span> FormControl</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">const</span> valid <span class="token operator">=</span> <span class="token operator">!</span><span class="token operator">!</span>control<span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+        <span class="token keyword">return</span> valid
+            <span class="token operator">?</span> <span class="token keyword">null</span>
+            <span class="token operator">:</span> <span class="token punctuation">{</span>
+                  required<span class="token operator">:</span> <span class="token punctuation">{</span>
+                      valid<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+                      text<span class="token operator">:</span> <span class="token string">'不能为空'</span><span class="token punctuation">,</span>
+                  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+              <span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h3 id="_3-在父组件添加验证器"><a href="#_3-在父组件添加验证器" class="header-anchor">#</a> 3. 在父组件添加验证器</h3> <p>要在自定义表单控件内校验，需要实现 validate 方法。如果未实现 validate 方法，可在父组件创建该 formControl 时设置验证器。</p> <div class="language-html extra-class"><pre class="language-html"><code><span class="token comment">&lt;!-- parent.component.html --&gt;</span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span>
+    <span class="token attr-name">[formGroup]</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>formGroup<span class="token punctuation">&quot;</span></span>
+    <span class="token attr-name">(ngSubmit)</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>onSubmit()<span class="token punctuation">&quot;</span></span>
+    <span class="token attr-name">novalidate</span>
+    <span class="token attr-name">autocomplete</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>off<span class="token punctuation">&quot;</span></span>
+<span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>ui-form-item<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>ui-label<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>性别<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>app-form-radio-group</span>
+            <span class="token attr-name">formControlName</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>inputRadioGender<span class="token punctuation">&quot;</span></span>
+            <span class="token attr-name">[name]</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span><span class="token punctuation">'</span>gender'<span class="token punctuation">&quot;</span></span>
+            <span class="token attr-name">[items]</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>genderRadioOptions<span class="token punctuation">&quot;</span></span>
+        <span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>app-form-radio-group</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">&gt;</span></span>
+</code></pre></div><div class="language-ts extra-class"><pre class="language-ts"><code><span class="token comment">/**
+ * file: parent.component.ts
+ */</span>
+<span class="token comment">// import ...</span>
+
+@<span class="token function">Component</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    templateUrl<span class="token operator">:</span> <span class="token string">'./parent.component.html'</span><span class="token punctuation">,</span>
+    styleUrls<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'./parent.component.scss'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">ParentComponent</span> <span class="token keyword">implements</span> <span class="token class-name">AfterContentInit</span> <span class="token punctuation">{</span>
+    formGroup<span class="token operator">:</span> FormGroup<span class="token punctuation">;</span>
+
+    <span class="token comment">/** 性别 radio控件选项 */</span>
+    genderRadioOptions <span class="token operator">=</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span>
+            label<span class="token operator">:</span> <span class="token string">'男'</span><span class="token punctuation">,</span>
+            value<span class="token operator">:</span> <span class="token string">'male'</span><span class="token punctuation">,</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">{</span>
+            label<span class="token operator">:</span> <span class="token string">'女'</span><span class="token punctuation">,</span>
+            value<span class="token operator">:</span> <span class="token string">'female'</span><span class="token punctuation">,</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">{</span>
+            label<span class="token operator">:</span> <span class="token string">'未知'</span><span class="token punctuation">,</span>
+            value<span class="token operator">:</span> <span class="token string">'other'</span><span class="token punctuation">,</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token parameter"><span class="token keyword">private</span> fb<span class="token operator">:</span> FormBuilder</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+    <span class="token function">ngAfterContentInit</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">initForm</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">/**
+     * 初始化表单
+     */</span>
+    <span class="token function">initForm</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>formGroup <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>fb<span class="token punctuation">.</span><span class="token function">group</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+            <span class="token comment">// 单选框group组件</span>
+            inputRadioGender<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">''</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>Validators<span class="token punctuation">.</span>required<span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">// ...</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="二-给已实例化的表单控件设置验证方法"><a href="#二-给已实例化的表单控件设置验证方法" class="header-anchor">#</a> 二. 给已实例化的表单控件设置验证方法</h2> <p>如表单控件实例化时未指定验证方法，也可在实例化之后再添加验证。</p> <h3 id="设置同步验证方法"><a href="#设置同步验证方法" class="header-anchor">#</a> 设置同步验证方法</h3> <p>可以这样给控件设置同步验证方法：<code>control.setValidators(newValidatorFn);</code></p> <p><code>newValidatorFn</code> 会覆盖该控件上已存在的任何同步验证器。</p> <p>可以通过重新设置已有规则来保留已有规则</p> <div class="language-ts extra-class"><pre class="language-ts"><code><span class="token comment">// ...</span>
+<span class="token keyword">class</span> <span class="token class-name">ParentComponent</span> <span class="token punctuation">{</span>
+    <span class="token comment">// ...</span>
+
+    <span class="token comment">/**
+     * 给表单控件添加新验证器的方法
+     * @param control AbstractControl控件
+     * @param fns ValidatorFn验证函数数组
+     */</span>
+    <span class="token function">addValidation</span><span class="token punctuation">(</span><span class="token parameter">control<span class="token operator">:</span> AbstractControl<span class="token punctuation">,</span> fns<span class="token operator">:</span> ValidatorFn<span class="token punctuation">[</span><span class="token punctuation">]</span></span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        control<span class="token punctuation">.</span><span class="token function">setValidators</span><span class="token punctuation">(</span><span class="token punctuation">[</span>
+            control<span class="token punctuation">.</span>validator<span class="token punctuation">,</span> <span class="token comment">// 保留原有的同步验证器</span>
+            <span class="token operator">...</span>fns
+        <span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment">/**
+     * 初始化表单
+     */</span>
+    <span class="token function">initForm</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>formGroup <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>fb<span class="token punctuation">.</span><span class="token function">group</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+            <span class="token comment">// 自定义组件, formControlName为'customControlFieldName', 初始值'defaultValue', 设置验证方法Validators.required</span>
+            customControlFieldName<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'defaultValue'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>Validators<span class="token punctuation">.</span>required<span class="token punctuation">]</span><span class="token punctuation">]</span>
+        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 定义一个新验证器</span>
+        <span class="token keyword">const</span> <span class="token function-variable function">newValidator</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">=&gt;</span><span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token parameter">control<span class="token operator">:</span> FormControl</span><span class="token punctuation">)</span><span class="token operator">=&gt;</span><span class="token punctuation">{</span>
+                <span class="token keyword">const</span> value <span class="token operator">=</span> control<span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+                <span class="token keyword">let</span> valid<span class="token punctuation">;</span>
+                <span class="token comment">// valid = ... // 根据规则验证</span>
+                <span class="token keyword">return</span> valid<span class="token operator">?</span> <span class="token keyword">null</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+                    newValidatorRuleName<span class="token operator">:</span> <span class="token punctuation">{</span>
+                        invalid<span class="token operator">:</span> <span class="token boolean">true</span>
+                    <span class="token punctuation">}</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        <span class="token comment">// 获取自定义控件实例</span>
+        <span class="token keyword">const</span> customControl <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>formGroup<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'customControlFieldName'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 添加新的验证规则</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">addValidation</span><span class="token punctuation">(</span>customControl<span class="token punctuation">,</span> <span class="token punctuation">[</span>newValidator<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+</code></pre></div><h3 id="设置异步验证方法"><a href="#设置异步验证方法" class="header-anchor">#</a> 设置异步验证方法</h3> <p>设置异步验证器同理，只要用 <code>setAsyncValidators</code> 方法替换 <code>setValidators</code> 方法</p> <p>参考: <a href="https://zhuanlan.zhihu.com/p/97564854" target="_blank" rel="noopener noreferrer">别再对 Angular Form 的 ControlValueAccessor 感到迷惑<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p></div> <footer><!----> <hr> <!----></footer></article> <div class="sticker vuepress-toc"><div class="vuepress-toc-item vuepress-toc-h2 active"><a href="#一-实现自定义表单控件" title="一. 实现自定义表单控件">一. 实现自定义表单控件</a></div><div class="vuepress-toc-item vuepress-toc-h3"><a href="#_1-controlvalueaccessor-接口" title="1. ControlValueAccessor 接口">1. ControlValueAccessor 接口</a></div><div class="vuepress-toc-item vuepress-toc-h3"><a href="#_2-具体实现" title="2. 具体实现">2. 具体实现</a></div><div class="vuepress-toc-item vuepress-toc-h3"><a href="#_3-在父组件添加验证器" title="3. 在父组件添加验证器">3. 在父组件添加验证器</a></div><div class="vuepress-toc-item vuepress-toc-h2"><a href="#二-给已实例化的表单控件设置验证方法" title="二. 给已实例化的表单控件设置验证方法">二. 给已实例化的表单控件设置验证方法</a></div><div class="vuepress-toc-item vuepress-toc-h3"><a href="#设置同步验证方法" title="设置同步验证方法">设置同步验证方法</a></div><div class="vuepress-toc-item vuepress-toc-h3"><a href="#设置异步验证方法" title="设置异步验证方法">设置异步验证方法</a></div></div></div></div> <footer class="footer" data-v-fdbf4940><div class="footer-left-wrap" data-v-fdbf4940><ul class="contact" data-v-fdbf4940><li class="contact-item" data-v-fdbf4940><a href="https://github.com/guojam" target="_blank" rel="noopener noreferrer" class="nav-link external" data-v-fdbf4940><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github" data-v-fdbf4940><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" data-v-fdbf4940></path></svg>
+          
+        </a></li></ul></div> <div class="footer-right-wrap" data-v-fdbf4940><ul class="copyright" data-v-fdbf4940><li class="copyright-item" data-v-fdbf4940><a href="https://policies.google.com/privacy?hl=en-US" target="_blank" rel="noopener noreferrer" class="nav-link external" data-v-fdbf4940>Privacy Policy</a></li><li class="copyright-item" data-v-fdbf4940><a href="/blog/2020/03/27/ng-custom-form-control/.html" class="nav-link" data-v-fdbf4940>MIT Licensed | Copyright © 2020-present Vue.js</a></li></ul></div></footer></div><div class="global-ui"></div></div>
+    <script src="/blog/assets/js/app.c68185d2.js" defer></script><script src="/blog/assets/js/6.208dbb32.js" defer></script><script src="/blog/assets/js/4.bd116204.js" defer></script><script src="/blog/assets/js/19.2863657b.js" defer></script>
+  </body>
+</html>

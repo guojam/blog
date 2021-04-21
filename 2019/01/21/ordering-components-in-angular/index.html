@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>使用 ngComponentOutlet 动态排序组件 | Jam&#39;s blog</title>
+    <meta name="description" content="
+
+import { Component, OnInit, Inject, Injector } from &#39;@angular/core&#39;;
+
+/* 子组件注入器token管理 /
+import { InjectionToken } from &#39;@angular/core&#39;;
+export const TOKENSUBCOMPA = new InjectionToken&lt;any ...">
+    <meta name="generator" content="VuePress 1.4.0">
+    
+    
+    <link rel="preload" href="/blog/assets/css/0.styles.06eee1e4.css" as="style"><link rel="preload" href="/blog/assets/js/app.c68185d2.js" as="script"><link rel="preload" href="/blog/assets/js/6.208dbb32.js" as="script"><link rel="preload" href="/blog/assets/js/4.bd116204.js" as="script"><link rel="preload" href="/blog/assets/js/16.3d83079c.js" as="script"><link rel="prefetch" href="/blog/assets/js/1.83070e30.js"><link rel="prefetch" href="/blog/assets/js/10.2b6e9132.js"><link rel="prefetch" href="/blog/assets/js/11.472170bb.js"><link rel="prefetch" href="/blog/assets/js/12.47e0aaee.js"><link rel="prefetch" href="/blog/assets/js/13.117ff703.js"><link rel="prefetch" href="/blog/assets/js/14.c617a9ec.js"><link rel="prefetch" href="/blog/assets/js/15.c0896ac2.js"><link rel="prefetch" href="/blog/assets/js/17.5489a10f.js"><link rel="prefetch" href="/blog/assets/js/18.4ba9fcc5.js"><link rel="prefetch" href="/blog/assets/js/19.2863657b.js"><link rel="prefetch" href="/blog/assets/js/20.d2043ed0.js"><link rel="prefetch" href="/blog/assets/js/21.f0052576.js"><link rel="prefetch" href="/blog/assets/js/5.44052d43.js"><link rel="prefetch" href="/blog/assets/js/7.9bf5a85f.js"><link rel="prefetch" href="/blog/assets/js/8.50a46eb7.js"><link rel="prefetch" href="/blog/assets/js/9.f7621bfb.js"><link rel="prefetch" href="/blog/assets/js/vuejs-paginate.04bf6230.js">
+    <link rel="stylesheet" href="/blog/assets/css/0.styles.06eee1e4.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div id="vuepress-theme-blog__global-layout"><section id="header-wrapper"><header id="header"><div class="header-wrapper"><div class="title"><a href="/blog/" class="nav-link home-link">Jam's blog</a></div> <div class="header-right-wrap"><ul class="nav"><li class="nav-item"><a href="/blog/" class="nav-link">Blog</a></li><li class="nav-item"><a href="/blog/tag/" class="nav-link">Tags</a></li></ul> <div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div></div></div></header></section> <div id="mobile-header"><div class="mobile-header-bar"><div class="mobile-header-title"><a href="/blog/" class="nav-link mobile-home-link">Jam's blog</a> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div> <div class="mobile-menu-wrapper"><hr class="menu-divider"> <ul class="mobile-nav"><li class="mobile-nav-item"><a href="/blog/" class="nav-link">Blog</a></li><li class="mobile-nav-item"><a href="/blog/tag/" class="nav-link">Tags</a></li></ul></div></div></div> <div class="content-wrapper"><div id="vuepress-theme-blog__post-layout"><article itemscope="itemscope" itemtype="https://schema.org/BlogPosting" class="vuepress-blog-theme-content"><header><h1 itemprop="name headline" class="post-title"></h1> <div class="post-meta"><!----> <div class="post-meta-date"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> <time pubdate itemprop="datePublished" datetime="2019-01-21T00:00:00.000Z">
+      2019-01-21
+    </time></div> <ul itemprop="keywords" class="post-meta-tags"><li class="post-tag" data-v-52d6caad><a href="/blog/tag/angular" data-v-52d6caad>angular</a></li></ul></div></header> <div itemprop="articleBody" class="content__default"><h1 id="使用-ngcomponentoutlet-动态排序组件"><a href="#使用-ngcomponentoutlet-动态排序组件" class="header-anchor">#</a> 使用 ngComponentOutlet 动态排序组件</h1> <div class="language-ts extra-class"><pre class="language-ts"><code><span class="token keyword">import</span> <span class="token punctuation">{</span> Component<span class="token punctuation">,</span> OnInit<span class="token punctuation">,</span> Inject<span class="token punctuation">,</span> Injector <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'@angular/core'</span><span class="token punctuation">;</span>
+
+<span class="token comment">/** 子组件注入器token管理 */</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> InjectionToken <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'@angular/core'</span><span class="token punctuation">;</span>
+<span class="token keyword">export</span> <span class="token keyword">const</span> <span class="token constant">TOKEN_SUBCOMP_A</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">InjectionToken</span><span class="token operator">&lt;</span><span class="token builtin">any</span><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="token string">'SubCompA_token'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">export</span> <span class="token keyword">const</span> <span class="token constant">TOKEN_SUBCOMP_B</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">InjectionToken</span><span class="token operator">&lt;</span><span class="token builtin">any</span><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="token string">'SubCompB_token'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">export</span> <span class="token keyword">const</span> <span class="token constant">TOKEN_SUBCOMP_C</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">InjectionToken</span><span class="token operator">&lt;</span><span class="token builtin">any</span><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="token string">'SubCompC_token'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">/** 子组件定义 */</span>
+@<span class="token function">Component</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    template<span class="token operator">:</span> <span class="token string">'&lt;div&gt;{{ data.title }}&lt;/div&gt;'</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token keyword">class</span> <span class="token class-name">SubAComponent</span> <span class="token keyword">implements</span> <span class="token class-name">OnInit</span> <span class="token punctuation">{</span>
+    data<span class="token operator">:</span> <span class="token builtin">any</span><span class="token punctuation">;</span>
+    <span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token parameter">@<span class="token function">Inject</span><span class="token punctuation">(</span><span class="token constant">TOKEN_SUBCOMP_A</span><span class="token punctuation">)</span> <span class="token keyword">private</span> dataInjector<span class="token operator">:</span> <span class="token builtin">any</span></span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+    <span class="token function">ngOnInit</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>data <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>dataInjector<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment">// 同样定义 SubBComponent/SubCComponent ...</span>
+
+<span class="token comment">/** 组件动态排序及数据注入 */</span>
+@<span class="token function">Component</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    template<span class="token operator">:</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">
+        &lt;div class=&quot;order-list&quot;&gt;
+            &lt;ng-container *ngFor=&quot;let item of sortedComponent&quot;&gt;
+                &lt;ng-container
+                    *ngComponentOutlet=&quot;item.component; injector: item.injector&quot;
+                &gt;&lt;/ng-container&gt;
+            &lt;/ng-container&gt;
+        &lt;/div&gt;
+    </span><span class="token template-punctuation string">`</span></span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">OrderCompComponent</span> <span class="token keyword">implements</span> <span class="token class-name">OnInit</span> <span class="token punctuation">{</span>
+    sortedComponent <span class="token operator">=</span> <span class="token operator">&lt;</span><span class="token builtin">any</span><span class="token operator">&gt;</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+    sortedMark<span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token punctuation">[</span>key<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">]</span><span class="token operator">:</span> <span class="token builtin">any</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token parameter"><span class="token keyword">private</span> injector<span class="token operator">:</span> Injector</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+    <span class="token function">ngOnInit</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">initData</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 修改注入数据</span>
+        <span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>sortedMark<span class="token punctuation">[</span><span class="token string">'subCompA'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'injector'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">setInjector</span><span class="token punctuation">(</span>
+                <span class="token constant">TOKEN_SUBCOMP_A</span><span class="token punctuation">,</span>
+                <span class="token punctuation">{</span>
+                    title<span class="token operator">:</span> <span class="token string">'新标题'</span><span class="token punctuation">,</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token number">3000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">/** 初始化动态组件数据 */</span>
+    <span class="token keyword">private</span> <span class="token keyword">async</span> <span class="token function">initData</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 异步获取已排序的组件信息</span>
+        <span class="token keyword">const</span> compList <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token punctuation">[</span>
+            <span class="token punctuation">{</span>
+                code<span class="token operator">:</span> <span class="token string">'subCompB'</span><span class="token punctuation">,</span>
+                data<span class="token operator">:</span> <span class="token punctuation">{</span>
+                    title<span class="token operator">:</span> <span class="token string">'子组件B'</span><span class="token punctuation">,</span>
+                <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token punctuation">{</span>
+                code<span class="token operator">:</span> <span class="token string">'subCompC'</span><span class="token punctuation">,</span>
+                data<span class="token operator">:</span> <span class="token punctuation">{</span>
+                    title<span class="token operator">:</span> <span class="token string">'子组件C'</span><span class="token punctuation">,</span>
+                <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token punctuation">{</span>
+                code<span class="token operator">:</span> <span class="token string">'subCompA'</span><span class="token punctuation">,</span>
+                data<span class="token operator">:</span> <span class="token punctuation">{</span>
+                    title<span class="token operator">:</span> <span class="token string">'子组件A'</span><span class="token punctuation">,</span>
+                <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">]</span><span class="token punctuation">;</span>
+        compList<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">item</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+            <span class="token keyword">let</span> component<span class="token punctuation">,</span> token<span class="token punctuation">;</span>
+            <span class="token keyword">switch</span> <span class="token punctuation">(</span>item<span class="token punctuation">[</span><span class="token string">'code'</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">case</span> <span class="token string">'subCompA'</span><span class="token operator">:</span>
+                    component <span class="token operator">=</span> SubAComponent<span class="token punctuation">;</span>
+                    token <span class="token operator">=</span> <span class="token constant">TOKEN_SUBCOMP_A</span><span class="token punctuation">;</span>
+                    <span class="token keyword">break</span><span class="token punctuation">;</span>
+                <span class="token keyword">case</span> <span class="token string">'subCompB'</span><span class="token operator">:</span>
+                    component <span class="token operator">=</span> SubBComponent<span class="token punctuation">;</span>
+                    token <span class="token operator">=</span> <span class="token constant">TOKEN_SUBCOMP_B</span><span class="token punctuation">;</span>
+                    <span class="token keyword">break</span><span class="token punctuation">;</span>
+                <span class="token keyword">case</span> <span class="token string">'subCompC'</span><span class="token operator">:</span>
+                    component <span class="token operator">=</span> SubCComponent<span class="token punctuation">;</span>
+                    token <span class="token operator">=</span> <span class="token constant">TOKEN_SUBCOMP_C</span><span class="token punctuation">;</span>
+                    <span class="token keyword">break</span><span class="token punctuation">;</span>
+                <span class="token keyword">default</span><span class="token operator">:</span>
+                    <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            item<span class="token punctuation">[</span><span class="token string">'component'</span><span class="token punctuation">]</span> <span class="token operator">=</span> component<span class="token punctuation">;</span>
+            <span class="token comment">// 生成子组件注入器</span>
+            item<span class="token punctuation">[</span><span class="token string">'injector'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">setInjector</span><span class="token punctuation">(</span>token<span class="token punctuation">,</span> item<span class="token punctuation">[</span><span class="token string">'data'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>sortedMark<span class="token punctuation">[</span>item<span class="token punctuation">[</span><span class="token string">'code'</span><span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">=</span> item<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>sortedComponent <span class="token operator">=</span> compList<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">/** 设置动态组件注入器 */</span>
+    <span class="token keyword">private</span> <span class="token function">setInjector</span><span class="token punctuation">(</span><span class="token parameter">token<span class="token operator">:</span> <span class="token builtin">any</span><span class="token punctuation">,</span> data<span class="token operator">:</span> <span class="token builtin">any</span></span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> Injector<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+            providers<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span> provide<span class="token operator">:</span> token<span class="token punctuation">,</span> useValue<span class="token operator">:</span> data <span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+            parent<span class="token operator">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>injector<span class="token punctuation">,</span>
+        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>参考：
+<a href="https://stackoverflow.com/questions/45280243/ordering-components-in-angular" target="_blank" rel="noopener noreferrer">Ordering components in angular<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p></div> <footer><!----> <hr> <!----></footer></article> <!----></div></div> <footer class="footer" data-v-fdbf4940><div class="footer-left-wrap" data-v-fdbf4940><ul class="contact" data-v-fdbf4940><li class="contact-item" data-v-fdbf4940><a href="https://github.com/guojam" target="_blank" rel="noopener noreferrer" class="nav-link external" data-v-fdbf4940><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github" data-v-fdbf4940><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" data-v-fdbf4940></path></svg>
+          
+        </a></li></ul></div> <div class="footer-right-wrap" data-v-fdbf4940><ul class="copyright" data-v-fdbf4940><li class="copyright-item" data-v-fdbf4940><a href="https://policies.google.com/privacy?hl=en-US" target="_blank" rel="noopener noreferrer" class="nav-link external" data-v-fdbf4940>Privacy Policy</a></li><li class="copyright-item" data-v-fdbf4940><a href="/blog/2019/01/21/ordering-components-in-angular/.html" class="nav-link" data-v-fdbf4940>MIT Licensed | Copyright © 2020-present Vue.js</a></li></ul></div></footer></div><div class="global-ui"></div></div>
+    <script src="/blog/assets/js/app.c68185d2.js" defer></script><script src="/blog/assets/js/6.208dbb32.js" defer></script><script src="/blog/assets/js/4.bd116204.js" defer></script><script src="/blog/assets/js/16.3d83079c.js" defer></script>
+  </body>
+</html>
